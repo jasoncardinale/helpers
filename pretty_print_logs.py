@@ -13,29 +13,28 @@ def pretty_print_logs():
     for line in iter(proc.stdout.readline, ''):
         tab_count = 0
         print("\n\n===========================================\n")
-        new_line = []
+        chars = []
         for char in line.decode('utf-8'):
             if char == '{':
                 tab_count += 1
-#                print(f"{char}\n", "".join(["  "] * tab_count), end="")
-                new_line.append("{}\n{}".format(char, "".join(["  "] * tab_count)))
+                chars.append("{}\n{}".format(char, "".join(["  "] * tab_count)))
             elif char == '}':
                 tab_count -= 1
-#                print("\n", "".join(["  "] * tab_count), "}", end="")
-                new_line.append("\n{}}}".format("".join(["  "] * tab_count)))
+                chars.append("\n{}}}".format("".join(["  "] * tab_count)))
             elif char == ',':
-#                print(f"{char}\n", "".join(["  "] * tab_count), end="")
-                new_line.append("{}\n{}".format(char, "".join(["  "] * tab_count)))
+                chars.append("{}\n{}".format(char, "".join(["  "] * tab_count)))
             else:
-#                print(char, end="")
-                new_line.append(char)
-                
-        line_string = "".join(new_line)
-        for term in key_terms:
-            index = line_string.find(term)
-            if index != -1:
-                line_string = string
-        print("".join(new_line))
+                chars.append(char)
+            
+        # Search for key terms and highlight them accordingly
+        line = "".join(chars)
+        for color, terms in key_terms.items():
+            for term in terms:
+                index = line.find(term)
+                if index != -1:
+                    line = line[:index] + colored(term, color) + line[index + len(term):]
+        
+        print(line)
 
 if __name__ == '__main__':
     pretty_print_logs()
