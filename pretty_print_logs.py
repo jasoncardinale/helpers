@@ -34,7 +34,7 @@ def pretty_print_logs():
                 if index != -1:
                     line = line[:index] + colored(term, color) + line[index + len(term):]
         
-        print(line)
+        print(line, end="")
 
 if __name__ == '__main__':
     pretty_print_logs()
